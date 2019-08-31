@@ -22,7 +22,6 @@ def sql_query(mobile_number):
 
 with open("resources/weights.bat","rb") as file:
     weights = pickle.load(file)
-    # TODO: detect for changes in weights
 
 def get_POV():
     with open("resources/POV.bat","rb") as file:
@@ -44,7 +43,7 @@ class customer():
         self.name = details[0]
         self.is_specially_abled = details[2]
         # details generated
-        self.ID = instances # TODO: rethink how to create unique ids on a daily basis
+        self.ID = str(datetime.datetime.now().microsecond)+mobile_number[6:]
         self.in_time = datetime.datetime.now()
         self.score = self.calculate_score(weights)
         # increasing instances
