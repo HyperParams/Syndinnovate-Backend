@@ -2,6 +2,12 @@ import datetime
 import pickle
 import heapq
 import psycopg2
+from twilio.rest import Client
+
+# initializing sms api-twilio
+account_sid = os.getenv('account_sid')
+auth_token = os.getenv('auth_token')
+client = Client(account_sid, auth_token)
 
 # initializing postgresql db
 conn = psycopg2.connect("dbname=syndicatebank user=rachit")
@@ -73,9 +79,10 @@ class customer():
         # TODO: update_digital_score
         pass
 
-    def alert_customer(self):
-        # TODO: alert_customer
-        pass
+    def alert_customer(self, text):
+        to_number = "+91"+self.mobile_number
+        message = client.messages.create(body=text, from="+12015089104", to=to_number)
+        print(message.sid)
 
     def update_details(self):
         # TODO: update_details

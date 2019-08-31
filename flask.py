@@ -1,16 +1,41 @@
-import classes
+import os
 import heapq
 import flask
 import pickle
+import random
+import classes
 import requests
 import psycopg2
+from twilio.rest import Client
 
 re_entry_threshold=3
 
-# TODO: input multiple lines like done for line1
-with open("resources/line1.bat","rb") as file:
+# initializing sms api-twilio
+account_sid = os.getenv('account_sid')
+auth_token = os.getenv('auth_token')
+client = Client(account_sid, auth_token)
+
+# initializing lines
+with open("resources/line1.dat","rb") as file:
     line1 = classes.line()
-    # line1 = pickle.load(file)
+    try:
+        line1 = pickle.load(file)
+    except EOFError:
+        line1 = []
+
+with open("resources/line2.dat","rb") as file:
+    line2 = classes.line()
+    try:
+        line2 = pickle.load(file)
+    except EOFError:
+        line2 = []
+
+with open("resources/line3.dat","rb") as file:
+    line3 = classes.line()
+    try:
+        line3 = pickle.load(file)
+    except EOFError:
+        line3 = []
 
 line_assignment = {
         1:line1,
@@ -27,9 +52,10 @@ line_assignment = {
         12:line3
 }
 
-with open("resources/weights.bat","rb") as file:
+otps = {}
+
+with open("resources/weights.dat","rb") as file:
     weights = pickle.load(file)
-    # TODO: detect for changes in weights
 
 occupied_customers = []
 
@@ -43,9 +69,21 @@ def landing():
 def add():
     mobile_number = flask.request.args.get('mobile-number')
     POV = flask.request.args.get('POV')
-    line_assignment[POV].add_customer(customer(mobile_number, POV, weights))
+    otp = flask.request.args.get('OTP')
+    if otp!=otps["mobile_number"]:
+        return flask.jsonify({'verified':False}), 200
+    else:
+        line_assignment[POV].add_customer(customer(mobile_number, POV, weights))
+        c.alert_customer("We have reserved your spot in the line. \n-Team Syndicate Bank")
+        return flask.jsonify({'verified':True}), 200
+
+@app.route('/verify/', methods=["GET", "POST"])
+def verify():
+    mobile_number = flask.request.args.get('mobile-number')
+    otps[mobile_number] = random.randint(100000, 999999)
     return flask.Response(), 200
 
+# TODO: enter value for <URL>
 # ================================================================================|COUNTER-1|=============================================================================================================
 
 @app.route('/counter-1/empty/', methods=["GET", "POST"])
@@ -56,8 +94,8 @@ def empty1():
             break
     c = line1.get_next_customer()
     occupied_customers.append((c, 1))
-    r = requests.post(url="<URL>/counter-1/next/", data=vars(c)) # TODO: enter value for <URL>
-    # TODO: send sms to customer
+    r = requests.post(url="<URL>/counter-1/next/", data=vars(c))
+    c.alert_customer("Please reach counter 1")
     return flask.Response(), 200
 
 @app.route('/counter-1/customer-not-there/', methods=["GET", "POST"])
@@ -84,8 +122,8 @@ def empty2():
             break
     c = line2.get_next_customer()
     occupied_customers.append((c, 2))
-    r = requests.post(url="<URL>/counter-2/next/",data=vars(c)) # TODO: enter value for <URL>
-    # TODO: send sms to customer
+    r = requests.post(url="<URL>/counter-2/next/",data=vars(c))
+    c.alert_customer("Please reach counter 2")
     return flask.Response(), 200
 
 @app.route('/counter-2/customer-not-there/', methods=["GET", "POST"])
@@ -112,8 +150,8 @@ def empty3():
             break
     c = line3.get_next_customer()
     occupied_customers.append((c, 3))
-    r = requests.post(url="<URL>/counter-3/next/",data=vars(c)) # TODO: enter value for <URL>
-    # TODO: send sms to customer
+    r = requests.post(url="<URL>/counter-3/next/",data=vars(c))
+    c.alert_customer("Please reach counter 3")
     return flask.Response(), 200
 
 @app.route('/counter-3/customer-not-there/', methods=["GET", "POST"])
@@ -140,8 +178,8 @@ def empty4():
             break
     c = line1.get_next_customer()
     occupied_customers.append((c, 4))
-    r = requests.post(url="<URL>/counter-4/next/",data=vars(c)) # TODO: enter value for <URL>
-    # TODO: send sms to customer
+    r = requests.post(url="<URL>/counter-4/next/",data=vars(c))
+    c.alert_customer("Please reach counter 4")
     return flask.Response(), 200
 
 @app.route('/counter-4/customer-not-there/', methods=["GET", "POST"])
