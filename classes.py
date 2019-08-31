@@ -1,10 +1,24 @@
 import datetime
 import pickle
 import heapq
+import psycopg2
+
+# initializing postgresql db
+conn = psycopg2.connect("dbname=syndicatebank user=rachit")
+cur = conn.cursor()
 
 def sql_query(mobile_number):
-    # TODO: implement SQL query
-    pass
+    # RAMANSH PSYCOPG2 IS SQL INJECTION PROOF!!!!!
+    cur.execute("SELECT * FROM customerdetials WHERE mobilenumber=%s;", (mobile_number))
+    customers = cur.fetchall()
+    if len(customers)>1:
+        print("Multiple customers with same mobile numbers!")
+        return None
+    elif len(customers)==0:
+        print("No entry found!")
+        return -1
+    else:
+        return customer
 
 with open("resources/weights.bat","rb") as file:
     weights = pickle.load(file)
@@ -24,10 +38,11 @@ class customer():
         self.mobile_number = mobile_number
         self.POV_code = ""
         # details to get from sql using mobile_number
+        # TODO: change i in details[i] according to table structure
         details = sql_query(self.mobile_number)
-        self.D_score = details["D_score"]
-        self.name = details["Name"]
-        self.is_specially_abled = details["is_specially_abled"]
+        self.D_score = details[1]
+        self.name = details[0]
+        self.is_specially_abled = details[2]
         # details generated
         self.ID = instances # TODO: rethink how to create unique ids on a daily basis
         self.in_time = datetime.datetime.now()

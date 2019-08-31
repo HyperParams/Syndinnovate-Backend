@@ -3,6 +3,7 @@ import heapq
 import flask
 import pickle
 import requests
+import psycopg2
 
 re_entry_threshold=3
 
@@ -131,7 +132,7 @@ def cusomer_didnt_show_up3():
 
 # ================================================================================|COUNTER-4|=============================================================================================================
 
-@app.route('/counter-4/empty/', methods=["GET", "POST"]) 
+@app.route('/counter-4/empty/', methods=["GET", "POST"])
 def empty4():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 4:
@@ -156,3 +157,8 @@ def cusomer_didnt_show_up4():
         c.re_entries+=1
         line1.add_customer(c)
     empty4()
+
+@app.route('/customer-served/', methods=["GET", "POST"])
+def customer_served():
+    # TODO: enter data into customer table according to the need of data analytics
+    pass
