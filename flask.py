@@ -73,7 +73,8 @@ def add():
     if otp!=otps["mobile_number"]:
         return flask.jsonify({'verified':False}), 200
     else:
-        line_assignment[POV].add_customer(customer(mobile_number, POV, weights))
+        c = customer(mobile_number, POV, weights)
+        line_assignment[POV].add_customer(c)
         c.alert_customer("We have reserved your spot in the line. \n-Team Syndicate Bank")
         return flask.jsonify({'verified':True}), 200
 
