@@ -39,7 +39,7 @@ except FileNotFoundError:
 
 def get_POV():
     try:
-        with open("resources/POV.bat","rb") as file:
+        with open("resources/POV.dat","rb") as file:
             POV = pickle.load(file)
             return POV
     except FileNotFoundError:

@@ -5,6 +5,7 @@ import random
 import classes
 import requests
 import psycopg2
+import datetime
 from twilio.rest import Client
 
 re_entry_threshold=3
@@ -66,7 +67,12 @@ except FileNotFoundError:
                 'is_specially_abled':1,
                 'POV':1
     }
-
+if weights == None:
+    weights = {'time':1,
+                'D_score':1,
+                'is_specially_abled':1,
+                'POV':1
+    }
 occupied_customers = []
 customers_not_reviewed = []
 
@@ -89,7 +95,9 @@ def add():
         c = classes.customer(mobile_number, POV, weights)
         line_assignment[POV].add_customer(c)
         c.alert_customer("We have reserved your spot in the line. \n-Team Syndicate Bank")
-        return flask.jsonify({'verified':True}), 200
+        response = flask.jsonify({'verified':True})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response, 200
 
 @app.route('/verify/', methods=["GET", "POST"])
 def verify():
@@ -97,23 +105,25 @@ def verify():
     otps[mobile_number] = str(random.randint(100000, 999999))
     to_number = "+91"+str(mobile_number)
     message = client.messages.create(body=str(otps[mobile_number]), from_="+12015089104", to=to_number)
-    print(message.sid)
-    return flask.Response(), 200
+    print(message.sid, datetime.datetime.now())
+    response = flask.jsonify({'ok':True})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
-# TODO: enter value for https://34481f09.ngrok.io
+# TODO: enter value for https://2bc5231b.ngrok.io
 # ================================================================================|COUNTER-1|=============================================================================================================
 
 @app.route('/counter-1/empty/', methods=["GET", "POST"])
 def empty1():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 1:
-            occupied_customers[i].end_service()
+            occupied_customers[i][0].end_service()
             del occupied_customers[i]
             break
     c = line1.get_next_customer()
     occupied_customers.append((c, 1))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://34481f09.ngrok.io/counter-1/next/", data=vars(c))
+    r = requests.post(url="https://2bc5231b.ngrok.io/counter-1/next/", data=vars(c))
     print(type(c))
     c.alert_customer("Please reach counter 1")
     c.end_waiting_time()
@@ -148,7 +158,7 @@ def empty2():
     c = line2.get_next_customer()
     occupied_customers.append((c, 2))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://34481f09.ngrok.io/counter-2/next/",data=vars(c))
+    r = requests.post(url="https://2bc5231b.ngrok.io/counter-2/next/",data=vars(c))
     c.alert_customer("Please reach counter 2")
     c.end_waiting_time()
     c.start_counter_time()
@@ -180,7 +190,7 @@ def empty3():
     c = line3.get_next_customer()
     occupied_customers.append((c, 3))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://34481f09.ngrok.io/counter-3/next/",data=vars(c))
+    r = requests.post(url="https://2bc5231b.ngrok.io/counter-3/next/",data=vars(c))
     c.alert_customer("Please reach counter 3")
     c.end_waiting_time()
     c.start_counter_time()
@@ -212,7 +222,7 @@ def empty4():
     c = line1.get_next_customer()
     occupied_customers.append((c, 4))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://34481f09.ngrok.io/counter-4/next/",data=vars(c))
+    r = requests.post(url="https://2bc5231b.ngrok.io/counter-4/next/",data=vars(c))
     c.alert_customer("Please reach counter 4")
     c.end_waiting_time()
     c.start_counter_time()
