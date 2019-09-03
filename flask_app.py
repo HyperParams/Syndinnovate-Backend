@@ -118,6 +118,7 @@ def empty1():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 1:
             occupied_customers[i][0].end_service()
+            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!") # TODO: enter value for url
             del occupied_customers[i]
             break
     c = line1.get_next_customer()
@@ -129,7 +130,9 @@ def empty1():
     c.end_waiting_time()
     c.start_counter_time()
     print(vars(c)) # DEBUGGING
-    return flask.Response(), 200
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 @app.route('/counter-1/customer-not-there/', methods=["GET", "POST"])
 def cusomer_didnt_show_up1():
@@ -144,7 +147,9 @@ def cusomer_didnt_show_up1():
         c.re_entries+=1
         line1.add_customer(c)
     empty1()
-    return flask.Response(), 200
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 # ================================================================================|COUNTER-2|=============================================================================================================
 
@@ -153,6 +158,7 @@ def empty2():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 2:
             occupied_customers[i].end_service()
+            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
             del occupied_customers[i]
             break
     c = line2.get_next_customer()
@@ -162,7 +168,9 @@ def empty2():
     c.alert_customer("Please reach counter 2")
     c.end_waiting_time()
     c.start_counter_time()
-    return flask.Response(), 200
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 @app.route('/counter-2/customer-not-there/', methods=["GET", "POST"])
 def cusomer_didnt_show_up2():
@@ -176,7 +184,9 @@ def cusomer_didnt_show_up2():
     else:
         c.re_entries+=1
         line2.add_customer(c)
-    empty2()
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 # ================================================================================|COUNTER-3|=============================================================================================================
 
@@ -185,16 +195,18 @@ def empty3():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 3:
             occupied_customers[i].end_service()
+            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
             del occupied_customers[i]
             break
     c = line3.get_next_customer()
     occupied_customers.append((c, 3))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://2bc5231b.ngrok.io/counter-3/next/",data=vars(c))
-    c.alert_customer("Please reach counter 3")
+    r = requests.post(url="https://counter 3")
     c.end_waiting_time()
     c.start_counter_time()
-    return flask.Response(), 200
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 @app.route('/counter-3/customer-not-there/', methods=["GET", "POST"])
 def cusomer_didnt_show_up3():
@@ -209,6 +221,9 @@ def cusomer_didnt_show_up3():
         c.re_entries+=1
         line3.add_customer(c)
     empty3()
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 # ================================================================================|COUNTER-4|=============================================================================================================
 
@@ -217,6 +232,7 @@ def empty4():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 4:
             occupied_customers[i].end_service()
+            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
             del occupied_customers[i]
             break
     c = line1.get_next_customer()
@@ -226,7 +242,9 @@ def empty4():
     c.alert_customer("Please reach counter 4")
     c.end_waiting_time()
     c.start_counter_time()
-    return flask.Response(), 200
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
 @app.route('/counter-4/customer-not-there/', methods=["GET", "POST"])
 def cusomer_didnt_show_up4():
@@ -241,8 +259,11 @@ def cusomer_didnt_show_up4():
         c.re_entries+=1
         line1.add_customer(c)
     empty4()
+    response = flask.jsonify(vars(c))
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
 
-@app.route('/customer-served/', methods=["GET", "POST"])
+@app.route('/review/', methods=["GET", "POST"])
 def customer_served():
     id = flask.request.args.get('ID')
     review = flask.request.args.get('review')
@@ -253,6 +274,25 @@ def customer_served():
             break
     cur.execute("INSERT INTO reviews VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);", (c.ID, c.mobile_number, c.D_score, c.is_specially_abled, c.waiting_time, c.on_counter_time, c.re_entries, review, rating))
     return flask.Response(), 200
+
+@app.route('/get-info/', methods=["GET", "POST"])
+def get_info():
+    with open('resources/params.dat', 'rb') as file:
+        try:
+            data = pickle.load(file)
+        except EOFError:
+            data = {'pi':[7.8,7.5,8]}
+    with open('resources/review stats.dat', 'rb') as file:
+        try:
+            stats = pickle.load(file)
+        except EOFError:
+            stats = {"time":5, "employee":4, "ambience":2}
+    response = flask.jsonify({"PI":data["pi"], "stats":stats})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response, 200
+
+# @app.route('/change-weights/', methods=["GET", "POST"])
+# def change_weights
 
 if __name__ == "__main__":
     app.run(port=4000)

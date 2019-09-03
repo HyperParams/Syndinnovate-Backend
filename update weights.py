@@ -76,7 +76,6 @@ for rating in ratings:
         x_bar = rows[:,column].mean()
         column_variances.append(((rows[:,column]-x_bar)**2).mean())
     variances.append((column_variances.index(min(column_variances)), min(column_variances)))
-variances
 
 
 # In[ ]:
