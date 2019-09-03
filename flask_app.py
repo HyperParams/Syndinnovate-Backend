@@ -268,6 +268,7 @@ def customer_served():
     id = flask.request.args.get('ID')
     review = flask.request.args.get('review')
     rating = flask.request.args.get('rating')
+    print(review, rating)
     for i in range(len(customers_not_reviewed)):
         if customers_not_reviewed[i].ID == id:
             c = customers_not_reviewed.pop(i)
@@ -281,7 +282,7 @@ def get_info():
         try:
             data = pickle.load(file)
         except EOFError:
-            data = {'pi':[7.8,7.5,8]}
+            data = {'pi':[5, 6.5, 5.5, 6, 7, 7.2, 7.8, 7.5, 8]}
     with open('resources/review stats.dat', 'rb') as file:
         try:
             stats = pickle.load(file)
@@ -293,6 +294,10 @@ def get_info():
 
 # @app.route('/change-weights/', methods=["GET", "POST"])
 # def change_weights
+@app.route('/test/', methods=["GET", "POST"])
+def test():
+    print(flask.request, flask.request.args)
+    return flask.Response(), 200
 
 if __name__ == "__main__":
     app.run(port=4000)
