@@ -12,7 +12,7 @@ print(auth_token)
 client = Client(account_sid, auth_token)
 
 # initializing postgresql db
-conn = psycopg2.connect("dbname=syndicatebank user=rachit")
+conn = psycopg2.connect("dbname=syndicatebank user=rachit password=12345678")
 cur = conn.cursor()
 
 def sql_query(mobile_number):

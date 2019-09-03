@@ -11,7 +11,7 @@ from twilio.rest import Client
 re_entry_threshold=3
 
 # initializing postgresql db
-conn = psycopg2.connect("dbname=syndicatebank user=rachit")
+conn = psycopg2.connect("dbname=syndicatebank user=rachit password=12345678")
 cur = conn.cursor()
 
 # initializing sms api-twilio
