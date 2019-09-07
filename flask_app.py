@@ -11,7 +11,7 @@ from twilio.rest import Client
 re_entry_threshold=3
 
 # initializing postgresql db
-conn = psycopg2.connect("dbname=syndicatebank user=rachit password=12345678")
+conn = psycopg2.connect("dbname=syndicatebank user=postgres password=postgres")
 cur = conn.cursor()
 
 # initializing sms api-twilio
@@ -300,4 +300,4 @@ def test():
     return flask.Response(), 200
 
 if __name__ == "__main__":
-    app.run(port=4000)
+    app.run(port=443)
