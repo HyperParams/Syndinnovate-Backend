@@ -21,8 +21,8 @@ conn = psycopg2.connect("dbname=syndicatebank user=postgres password=postgres")
 cur = conn.cursor()
 
 # initializing sms api-twilio
-account_sid = os.environ['SID']
-auth_token = os.environ['AUTH_TOKEN']
+account_sid = os.environ["SID"]
+auth_token = os.environ["AUTH_TOKEN"]
 client = Client(account_sid, auth_token)
 
 # initializing lines

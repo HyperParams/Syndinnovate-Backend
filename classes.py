@@ -6,8 +6,8 @@ import datetime
 from twilio.rest import Client
 
 # initializing sms api-twilio
-account_sid = os.environ['SID']
-auth_token = os.environ['AUTH_TOKEN']
+account_sid = os.environ["SID"]
+auth_token = os.environ["AUTH_TOKEN"]
 print(auth_token)
 client = Client(account_sid, auth_token)
 
