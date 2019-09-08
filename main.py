@@ -8,6 +8,11 @@ import psycopg2
 import datetime
 from twilio.rest import Client
 
+# from OpenSSL import SSL
+# context = SSL.Context(SSL.PROTOCOL_TLSv1_2)
+# context.use_privatekey_file('server.key')
+# context.use_certificate_file('server.crt')
+
 re_entry_threshold=3
 
 # initializing postgresql db
@@ -299,5 +304,8 @@ def test():
     print(flask.request, flask.request.args)
     return flask.Response(), 200
 
-if __name__ == "__main__":
-    app.run(port=443)
+# if __name__ == "__main__":
+#     app.run(port=80, host='0.0.0.0')
+
+if __name__ == '__main__':  
+     app.run(host='0.0.0.0', ssl_context=('cert.pem', 'key.pem'), port=80)
