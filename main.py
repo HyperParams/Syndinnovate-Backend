@@ -124,7 +124,7 @@ def empty1():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 1:
             occupied_customers[i][0].end_service()
-            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!") # TODO: enter value for url
+            occupied_customers[i][0].alert_customer("Please review your experience at https://hyperparams.github.io/SyndInnovate-Frontend/review.html?num=!"+occupied_customers[i][0].mobile_number) # TODO: enter value for url
             del occupied_customers[i]
             break
     c = line1.get_next_customer()
@@ -164,7 +164,7 @@ def empty2():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 2:
             occupied_customers[i].end_service()
-            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
+            occupied_customers[i][0].alert_customer("Please review your experience at https://hyperparams.github.io/SyndInnovate-Frontend/review.html?num=!"+occupied_customers[i][0].mobile_number)
             del occupied_customers[i]
             break
     c = line2.get_next_customer()
@@ -201,7 +201,7 @@ def empty3():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 3:
             occupied_customers[i].end_service()
-            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
+            occupied_customers[i][0].alert_customer("Please review your experience at https://hyperparams.github.io/SyndInnovate-Frontend/review.html?num=!"+occupied_customers[i][0].mobile_number)
             del occupied_customers[i]
             break
     c = line3.get_next_customer()
@@ -238,7 +238,7 @@ def empty4():
     for i in range(len(occupied_customers)):
         if occupied_customers[i][1] == 4:
             occupied_customers[i].end_service()
-            occupied_customers[i][0].alert_customer("Please review your experience at <URL>!")
+            occupied_customers[i][0].alert_customer("Please review your experience at https://hyperparams.github.io/SyndInnovate-Frontend/review.html?num=!"+occupied_customers[i][0].mobile_number)
             del occupied_customers[i]
             break
     c = line1.get_next_customer()
