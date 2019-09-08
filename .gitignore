@@ -1,3 +1,4 @@
 .env
 test.py
 settings.py
+resources/auth.txt
