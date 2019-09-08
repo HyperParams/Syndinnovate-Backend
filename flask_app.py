@@ -42,6 +42,7 @@ with open("resources/line3.dat","rb") as file:
         line3 = classes.line()
 
 line_assignment = {
+'0':line1,
         '1':line1,
         '2':line1,
         '3':line1,
@@ -110,7 +111,7 @@ def verify():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response, 200
 
-# TODO: enter value for https://2bc5231b.ngrok.io
+# TODO: enter value for https://5e339b7d.ngrok.io
 # ================================================================================|COUNTER-1|=============================================================================================================
 
 @app.route('/counter-1/empty/', methods=["GET", "POST"])
@@ -124,7 +125,7 @@ def empty1():
     c = line1.get_next_customer()
     occupied_customers.append((c, 1))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://2bc5231b.ngrok.io/counter-1/next/", data=vars(c))
+    r = requests.post(url="https://5e339b7d.ngrok.io/counter-1/next/", data=vars(c))
     print(type(c))
     c.alert_customer("Please reach counter 1")
     c.end_waiting_time()
@@ -164,7 +165,7 @@ def empty2():
     c = line2.get_next_customer()
     occupied_customers.append((c, 2))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://2bc5231b.ngrok.io/counter-2/next/",data=vars(c))
+    r = requests.post(url="https://5e339b7d.ngrok.io/counter-2/next/",data=vars(c))
     c.alert_customer("Please reach counter 2")
     c.end_waiting_time()
     c.start_counter_time()
@@ -238,7 +239,7 @@ def empty4():
     c = line1.get_next_customer()
     occupied_customers.append((c, 4))
     customers_not_reviewed.append(c)
-    r = requests.post(url="https://2bc5231b.ngrok.io/counter-4/next/",data=vars(c))
+    r = requests.post(url="https://5e339b7d.ngrok.io/counter-4/next/",data=vars(c))
     c.alert_customer("Please reach counter 4")
     c.end_waiting_time()
     c.start_counter_time()

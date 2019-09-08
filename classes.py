@@ -1,7 +1,7 @@
 import os
 import pickle
 import heapq
-import psycopg2-binary as psycopg2
+import psycopg2
 import datetime
 from twilio.rest import Client
 
