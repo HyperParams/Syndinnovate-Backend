@@ -1,1 +1,15 @@
+numpy
+pandas
+pprint
+logging
+nltk
+spacy
+gensim
+pyLDAvis
 Flask
+requests
+psycopg2
+twilio
+python-dotenv
+
+
